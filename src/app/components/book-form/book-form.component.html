@@ -1,0 +1,122 @@
+<div class="form-container">
+  <div class="form-header">
+    <h2>{{ isEditMode ? '✏️ Edit Book' : '➕ Add New Book' }}</h2>
+    <p class="form-subtitle">
+      {{ isEditMode ? 'Update book information' : 'Enter book details to add to your library' }}
+    </p>
+  </div>
+
+  <!-- Messages -->
+  <div *ngIf="error" class="alert alert-error" (click)="clearMessages()">
+    ❌ {{ error }}
+  </div>
+  
+  <div *ngIf="successMessage" class="alert alert-success" (click)="clearMessages()">
+    ✅ {{ successMessage }}
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading && isEditMode" class="loading">
+    <div class="spinner"></div>
+    <p>Loading book details...</p>
+  </div>
+
+  <!-- Form -->
+  <form [formGroup]="bookForm" (ngSubmit)="onSubmit()" class="book-form" *ngIf="!loading || !isEditMode">
+    <div class="form-group">
+      <label for="title" class="form-label">
+        📖 Book Title <span class="required">*</span>
+      </label>
+      <input 
+        type="text" 
+        id="title"
+        formControlName="title"
+        class="form-input"
+        [class.error]="isFieldInvalid('title')"
+        placeholder="Enter book title">
+      <div *ngIf="getFieldError('title')" class="field-error">
+        {{ getFieldError('title') }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="author" class="form-label">
+        👤 Author <span class="required">*</span>
+      </label>
+      <input 
+        type="text" 
+        id="author"
+        formControlName="author"
+        class="form-input"
+        [class.error]="isFieldInvalid('author')"
+        placeholder="Enter author name">
+      <div *ngIf="getFieldError('author')" class="field-error">
+        {{ getFieldError('author') }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="year" class="form-label">
+        📅 Publication Year <span class="required">*</span>
+      </label>
+      <input 
+        type="number" 
+        id="year"
+        formControlName="year"
+        class="form-input"
+        [class.error]="isFieldInvalid('year')"
+        placeholder="Enter publication year"
+        min="1000"
+        [max]="maxYear">
+      <div *ngIf="getFieldError('year')" class="field-error">
+        {{ getFieldError('year') }}
+      </div>
+      <div class="field-hint">
+        Enter a year between 1000 and {{ maxYear }}
+      </div>
+    </div>
+    <!-- File Upload -->
+     
+<div class="form-group">
+  <label for="file" class="form-label">
+    📎 Upload File <span class="required">*</span>
+  </label>
+  <input
+    type="file"
+    id="file"
+    (change)="onFileSelected($event)"
+    class="form-input"
+    accept=".pdf,.doc,.docx,.txt,.jpg,.png"/>
+  <div *ngIf="fileError" class="field-error">
+    {{ fileError }}
+  </div>
+</div>
+
+
+    <div class="form-actions">
+      <button 
+        type="button" 
+        (click)="onCancel()" 
+        class="btn btn-secondary"
+        [disabled]="loading">
+        Cancel
+      </button>
+      <button 
+        type="submit" 
+        class="btn btn-primary"
+        [disabled]="loading || bookForm.invalid">
+        <span *ngIf="loading" class="button-spinner"></span>
+        {{ isEditMode ? 'Update Book' : 'Add Book' }}
+      </button>
+    </div>
+  </form>
+
+  <!-- Form Status Info (for development) -->
+  <div class="form-debug" *ngIf="false">
+    <h4>Form Status (Debug)</h4>
+    <p>Form Valid: {{ bookForm.valid }}</p>
+    <p>Form Value: {{ bookForm.value | json }}</p>
+    <p>Form Errors: {{ bookForm.errors | json }}</p>
+  </div>
+  
+</div>

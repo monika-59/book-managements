@@ -1,0 +1,19 @@
+<!-- src/app/app.component.html -->
+<div class="app-container">
+  <header class="header">
+    <h1>📚 Library Management System</h1>
+    <nav class="nav">
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/add-book" routerLinkActive="active">Add Book</a>
+      <a routerLink="/import-export" routerLinkActive="active">Import/Export</a>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025 Library Management System</p>
+  </footer>
+</div>

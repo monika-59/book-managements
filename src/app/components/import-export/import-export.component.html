@@ -1,0 +1,130 @@
+<!-- src/app/components/import-export/import-export.component.html -->
+<div class="import-export-container">
+  <div class="page-header">
+    <h2>📁 Import & Export Books</h2>
+    <p class="page-subtitle">Manage your book data with file operations</p>
+  </div>
+
+  <!-- Messages -->
+  <div *ngIf="error" class="alert alert-error" (click)="clearMessages()">
+    ❌ {{ error }}
+  </div>
+  
+  <div *ngIf="successMessage" class="alert alert-success" (click)="clearMessages()">
+    ✅ {{ successMessage }}
+  </div>
+
+  <div class="operations-grid">
+    <!-- Export Section -->
+    <div class="operation-card">
+      <div class="card-header">
+        <h3>📤 Export Books</h3>
+        <p>Download your book collection</p>
+      </div>
+      
+      <div class="card-content">
+        <div class="export-options">
+          <div class="export-option">
+            <div class="option-info">
+              <h4>📊 CSV Format</h4>
+              <p>Comma-separated values, perfect for spreadsheet applications</p>
+            </div>
+            <button 
+              (click)="exportToCSV()" 
+              class="btn btn-primary"
+              [disabled]="loading">
+              <span *ngIf="loading" class="button-spinner"></span>
+              Download CSV
+            </button>
+          </div>
+
+          <div class="export-option">
+            <div class="option-info">
+              <h4>📄 TXT Format</h4>
+              <p>Plain text format, human-readable and simple</p>
+            </div>
+            <button 
+              (click)="exportToTXT()" 
+              class="btn btn-secondary"
+              [disabled]="loading">
+              <span *ngIf="loading" class="button-spinner"></span>
+              Download TXT
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Import Section -->
+    <div class="operation-card">
+      <div class="card-header">
+        <h3>📥 Import Books</h3>
+        <p>Upload a file to add books to your collection</p>
+      </div>
+      
+      <div class="card-content">
+        <!-- File Upload Area -->
+        <div 
+          class="file-upload-area"
+          [class.drag-over]="dragOver"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onDrop($event)">
+          
+          <div class="upload-content">
+            <div class="upload-icon">📁</div>
+            <h4>Drag & Drop your file here</h4>
+            <p>or click to browse</p>
+            <input 
+              type="file" 
+              id="fileInput"
+              accept=".csv,.txt"
+              (change)="onFileSelected($event)"
+              class="file-input">
+            <label for="fileInput" class="file-input-label">
+              Choose File
+            </label>
+          </div>
+        </div>
+
+        <!-- Selected File Info -->
+        <div *ngIf="selectedFile" class="selected-file">
+          <div class="file-info">
+            <div class="file-icon">📄</div>
+            <div class="file-details">
+              <h4>{{ selectedFile.name }}</h4>
+              <p>{{ formatFileSize(selectedFile.size) }}</p>
+            </div>
+            <button 
+              (click)="removeSelectedFile()" 
+              class="btn btn-remove"
+              title="Remove file">
+              ✕
+            </button>
+          </div>
+          
+          <button 
+            (click)="importBooks()" 
+            class="btn btn-success import-btn"
+            [disabled]="loading">
+            <span *ngIf="loading" class="button-spinner"></span>
+            Import Books
+          </button>
+        </div>
+
+        <!-- Import Instructions -->
+        <div class="import-instructions">
+          <h4>📋 File Format Requirements:</h4>
+          <ul>
+            <li><strong>CSV Format:</strong> </li>
+            <li><strong>TXT Format:</strong></li>
+            <li>Maximum file size: 5MB</li>
+            <li>Supported formats: .csv, .txt</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ 
+</div>

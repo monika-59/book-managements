@@ -1,0 +1,87 @@
+<!-- src/app/components/dashboard/dashboard.component.html -->
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h2>📖 Book Dashboard</h2>
+    <div class="header-actions">
+      <div class="search-container">
+        <input 
+          type="text" 
+          [(ngModel)]="searchQuery" 
+          (input)="onSearch()" 
+          placeholder="Search by title or author..."
+          class="search-input">
+        <button class="search-btn" (click)="onSearch()">🔍</button>
+      </div>
+      <a routerLink="/add-book" class="btn btn-primary">+ Add New Book</a>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div *ngIf="error" class="alert alert-error" (click)="clearMessages()">
+    ❌ {{ error }}
+  </div>
+  
+  <div *ngIf="successMessage" class="alert alert-success" (click)="clearMessages()">
+    ✅ {{ successMessage }}
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading books...</p>
+  </div>
+
+  <!-- Books Table -->
+  <div *ngIf="!loading" class="table-container">
+    <table class="books-table" *ngIf="filteredBooks.length > 0; else noBooks">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Year</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let book of filteredBooks; trackBy: trackByBookId">
+          <td class="book-title">{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.year }}</td>
+          <td class="actions">
+            <a [routerLink]="['/edit-book', book.bookId]" class="btn btn-edit">
+              ✏️ Edit
+            </a>
+            <button class="btn btn-secondary" (click)="exportBooks(book)">
+              📥 Export Books
+            </button>
+            <button (click)="deleteBook(book)" class="btn btn-delete">
+              🗑️ Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #noBooks>
+      <div class="no-books">
+        <div class="no-books-icon">📚</div>
+        <h3>No books found</h3>
+        <p *ngIf="searchQuery">Try adjusting your search criteria</p>
+        <p *ngIf="!searchQuery">Start by adding your first book!</p>
+        <a routerLink="/add-book" class="btn btn-primary">Add Your First Book</a>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" *ngIf="!loading">
+    <div class="stat-item">
+      <span class="stat-number">{{ books.length }}</span>
+      <span class="stat-label">Total Books</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">{{ filteredBooks.length }}</span>
+      <span class="stat-label">Showing</span>
+    </div>
+  </div>
+</div>
